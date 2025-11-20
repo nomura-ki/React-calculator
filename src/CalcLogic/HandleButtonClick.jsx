@@ -80,7 +80,36 @@ export function HandleNumberClick(num, prev) {
   };
 }
 
-export function HandlePointClick(prev) {}
+export function HandlePointClick(prev) {
+  if (prev.phase === "ResultShown") {
+    prev = {
+      ...prev,
+      operandA: "0",
+      operandB: "",
+      operator: null,
+      phase: "EnteringA",
+      SDvalue: "",
+    };
+  }
+
+  let getOperand = getActive(prev);
+
+  if (getOperand.includes(".")) {
+    return { ...prev };
+  } else if (getOperand === "" || getOperand === undefined) {
+    getOperand = `0.`;
+  } else {
+    getOperand = `${getOperand}.`;
+  }
+
+  prev = setActive(getOperand, prev);
+  prev = refreshSubDisplay(false, prev);
+
+  return {
+    ...prev,
+    MDvalue: getOperand,
+  };
+}
 
 export function HandleOperatorClick(op, prev) {}
 
