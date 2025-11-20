@@ -215,7 +215,80 @@ export function HandleOperatorClick(op, prev) {
   return { ...prev };
 }
 
-export function HandleEqualClick(prev) {}
+export function HandleEqualClick(prev) {
+  let getOperand = getActive(prev);
+  while (getOperand.endsWith("0") && getOperand.includes(".")) {
+    getOperand = getOperand.slice(0, -1);
+    setActive(getOperand, prev);
+  }
+
+  if (getOperand.endsWith(".")) {
+    getOperand = getOperand.slice(0, -1);
+    setActive(getOperand, prev);
+  }
+
+  const op = prev.operator;
+  const oprdA = prev.operandA || "0";
+  const oprdB = prev.operandB || (prev.phase === "EnteringB" ? oprdA : "");
+
+  if (op === null || op === undefined) {
+    return { ...prev };
+  }
+
+  const A = new Decimal(oprdA);
+  const B = new Decimal(oprdB === "" ? "0" : oprdB);
+
+  if (op === "÷" && B.eq(0)) {
+    return {
+      ...prev,
+      operandA: "0",
+      operandB: "",
+      operator: null,
+      MDvalue: "0で割ることはできません！",
+      SDvalue: "",
+      phase: "ResultShown",
+    };
+  }
+
+  let calc = 0;
+  switch (op) {
+    case "+":
+      calc = A.plus(B);
+      break;
+
+    case "－":
+      calc = A.minus(B);
+      break;
+
+    case "×":
+      calc = A.times(B);
+      break;
+
+    case "÷":
+      calc = A.div(B);
+      break;
+
+    default:
+      return;
+  }
+
+  const dispCalc = isOverMaxNumber(calc)
+    ? calc.toExponential()
+    : calc.toString();
+
+  prev = refreshSubDisplay(true, prev);
+
+  prev = {
+    ...prev,
+    operandA: String(dispCalc),
+    operandB: "",
+    operator: null,
+    phase: "ResultShown",
+    MDvalue: dispCalc,
+  };
+
+  return { ...prev };
+}
 
 export function HandleBackspaceClick(prev) {}
 
