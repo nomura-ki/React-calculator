@@ -1,25 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import MainWindow from "./components/MainWindow";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div class="w-[330px] h-[390px] border-[1px] border-[#d2d4d6] border-solid bg-[#eff2f7] rounded-lg fixed left-[10%] top-[10%]">
+        <MainWindow />
+      </div>
+    </>
   );
 }
-
-export default App;
