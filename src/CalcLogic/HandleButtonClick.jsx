@@ -18,10 +18,10 @@ function getActive(prev) {
   return activeName(prev) === "operandA" ? prev.operandA : prev.operandB;
 }
 
-function setActive(prev) {
+function setActive(value, prev) {
   return activeName(prev) === "operandA"
-    ? { ...prev, operandA: 3 }
-    : { ...prev, operandB: 8 };
+    ? { ...prev, operandA: value }
+    : { ...prev, operandB: value };
 }
 
 function refreshSubDisplay(withEqual, prev) {
@@ -47,7 +47,38 @@ function refreshSubDisplay(withEqual, prev) {
   }
 }
 
-export function HandleNumberClick(num, prev) {}
+export function HandleNumberClick(num, prev) {
+  if (prev.phase === "ResultShown") {
+    prev = {
+      ...prev,
+      operandA: "",
+      operandB: "",
+      operator: null,
+      phase: "EnteringA",
+      SDvalue: "",
+    };
+  }
+
+  let getOperand = getActive(prev);
+
+  if (getOperand === "" || getOperand === "0") {
+    getOperand = String(num);
+  } else {
+    getOperand = String(getOperand) + String(num);
+  }
+
+  if (isOverMaxNumber(getOperand)) {
+    return { ...prev };
+  }
+
+  prev = setActive(getOperand, prev);
+  prev = refreshSubDisplay(false, prev);
+
+  return {
+    ...prev,
+    MDvalue: getOperand,
+  };
+}
 
 export function HandlePointClick(prev) {}
 
