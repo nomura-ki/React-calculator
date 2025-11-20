@@ -111,7 +111,109 @@ export function HandlePointClick(prev) {
   };
 }
 
-export function HandleOperatorClick(op, prev) {}
+export function HandleOperatorClick(op, prev) {
+  if (prev.operandA === "") {
+    prev = { ...prev, operandA: "0" };
+  }
+
+  let getOperand = getActive(prev);
+  while (getOperand.endsWith("0") && getOperand.includes(".")) {
+    getOperand = getOperand.slice(0, -1);
+    prev = setActive(getOperand, prev);
+  }
+
+  if (getOperand.endsWith(".")) {
+    getOperand = getOperand.slice(0, -1);
+    prev = setActive(getOperand, prev);
+  }
+
+  if (prev.phase === "ResultShown") {
+    prev = {
+      ...prev,
+      phase: "EnteringB",
+      operator: op,
+      operandB: "",
+      MDvalue: prev.OperandA,
+    };
+    prev = refreshSubDisplay(false, prev);
+
+    return { ...prev };
+  }
+
+  if (prev.phase === "EnteringB" && prev.operandB === "") {
+    prev = { ...prev, operator: op };
+    prev = refreshSubDisplay(false, prev);
+    return { ...prev };
+  } else if (prev.phase === "EnteringB") {
+    const oldOp = prev.operator;
+    const oprdA = prev.operandA || "0";
+    const oprdB = prev.operandB || "0";
+
+    const A = new Decimal(oprdA);
+    const B = new Decimal(oprdB);
+
+    if (oldOp === "÷" && B.eq(0)) {
+      return {
+        ...prev,
+        operandA: "0",
+        operandB: "",
+        operator: null,
+        MDvalue: "0で割ることはできません！",
+        SDvalue: "",
+        phase: "ResultShown",
+      };
+    }
+
+    let calc = 0;
+    switch (oldOp) {
+      case "+":
+        calc = A.plus(B);
+        break;
+
+      case "－":
+        calc = A.minus(B);
+        break;
+
+      case "×":
+        calc = A.times(B);
+        break;
+
+      case "÷":
+        calc = A.div(B);
+        break;
+
+      default:
+        return;
+    }
+
+    const dispCalc = isOverMaxNumber(calc)
+      ? calc.toExponential()
+      : calc.toString();
+
+    prev = {
+      ...prev,
+      operandA: dispCalc,
+      operandB: "",
+      operator: op,
+      phase: "EnteringB",
+      MDvalue: dispCalc,
+    };
+    prev = refreshSubDisplay(false, prev);
+
+    return { ...prev };
+  }
+
+  prev = {
+    ...prev,
+    operator: op,
+    phase: "EnteringB",
+    operandB: "",
+    MDvalue: prev.operandA,
+  };
+  prev = refreshSubDisplay(false, prev);
+
+  return { ...prev };
+}
 
 export function HandleEqualClick(prev) {}
 
