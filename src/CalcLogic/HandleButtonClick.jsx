@@ -290,7 +290,22 @@ export function HandleEqualClick(prev) {
   return { ...prev };
 }
 
-export function HandleBackspaceClick(prev) {}
+export function HandleBackspaceClick(prev) {
+  if (prev.phase === "EnteringB" && prev.operandB === "") return;
+
+  let calc = String(getActive(prev) ?? "0");
+
+  if (calc.length < 2) {
+    calc = "0";
+  } else {
+    calc = calc.slice(0, -1);
+  }
+
+  prev = setActive(calc, prev);
+  prev = { ...prev, MDvalue: calc };
+  prev = refreshSubDisplay(false, prev);
+  return { ...prev };
+}
 
 export function HandleClearEntryClick(prev) {}
 
