@@ -9,8 +9,7 @@ import {
   HandleOperatorClick,
   HandlePointClick,
 } from "../CalcLogic/HandleButtonClick";
-import MainDisplay from "./display/MainDisplay";
-import SubDisplay from "./display/SubDisplay";
+import ChangeFontSize from "./display/ChangeFontSize";
 
 const defaultState = {
   operandA: "0",
@@ -27,10 +26,10 @@ export default function MainWindow() {
     <>
       <div className="m-[5px]">
         <div className="h-[35px] w-[320px]">
-          <SubDisplay value={state.SDvalue} />
+          <ChangeFontSize value={state.SDvalue} max="25" min="10" />
         </div>
-        <div class="h-[65px] w-[320px] mt-[5px]">
-          <MainDisplay value={state.MDvalue} />
+        <div className="mt-[5px]">
+          <ChangeFontSize value={state.MDvalue} max="40" min="16" />
         </div>
       </div>
 
