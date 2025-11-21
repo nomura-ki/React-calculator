@@ -1,51 +1,10 @@
 import Decimal from "https://unpkg.com/decimal.js@latest/decimal.mjs";
-
-const MaxNumber = 16;
-
-function isOverMaxNumber(numberValue) {
-  const str = Decimal.isDecimal()
-    ? numberValue.toString()
-    : String(numberValue);
-  const digits = str.replace(/\./g, "");
-  return digits.length > MaxNumber;
-}
-
-function activeName(prev) {
-  return prev.phase === "EnteringA" ? "operandA" : "operandB";
-}
-
-function getActive(prev) {
-  return activeName(prev) === "operandA" ? prev.operandA : prev.operandB;
-}
-
-function setActive(value, prev) {
-  return activeName(prev) === "operandA"
-    ? { ...prev, operandA: value }
-    : { ...prev, operandB: value };
-}
-
-function refreshSubDisplay(withEqual, prev) {
-  if (withEqual === undefined) {
-    withEqual = false;
-  }
-
-  const oprdA = prev.operandA;
-  const oprdB = prev.operandB;
-  const op = prev.operator;
-
-  if (op === null) {
-    return { ...prev, SDvalue: "" };
-  }
-
-  const left = oprdA === "" ? "0" : oprdA;
-  const right = oprdB === "" ? (withEqual ? left : "0") : oprdB;
-
-  if (withEqual) {
-    return { ...prev, SDvalue: `${left} ${op} ${right} =` };
-  } else {
-    return { ...prev, SDvalue: `${left} ${op}` };
-  }
-}
+import {
+  isOverMaxNumber,
+  getActive,
+  setActive,
+  refreshSubDisplay,
+} from "./SharedUtility";
 
 export function HandleNumberClick(num, prev) {
   if (prev.phase === "ResultShown") {
