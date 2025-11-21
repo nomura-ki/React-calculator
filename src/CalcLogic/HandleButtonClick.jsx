@@ -331,4 +331,15 @@ export function HandleClearEntryClick(prev) {
   return { ...prev };
 }
 
-export function HandleClearAllClick(prev) {}
+export function HandleClearAllClick(prev) {
+  prev = {
+    ...prev,
+    operandA: "0",
+    operandB: "",
+    operator: null,
+    phase: "EnteringA",
+    MDvalue: "0",
+  };
+  prev = refreshSubDisplay(false, prev);
+  return { ...prev };
+}
