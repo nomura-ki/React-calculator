@@ -25,8 +25,8 @@ export default function MainWindow() {
   const [state, setState] = useState(defaultState);
   return (
     <>
-      <div class="m-[5px]">
-        <div class="h-[35px] w-[320px]">
+      <div className="m-[5px]">
+        <div className="h-[35px] w-[320px]">
           <SubDisplay value={state.SDvalue} />
         </div>
         <div class="h-[65px] w-[320px] mt-[5px]">
@@ -60,7 +60,7 @@ export default function MainWindow() {
           <Square
             value="÷"
             onSquareClick={() => {
-              setState((prevState) => HandleOperatorClick("÷", prevState));
+              setState((prevState) => HandleOperatorClick("/", prevState));
             }}
             css="allBtn BtnOps"
           />
@@ -88,7 +88,7 @@ export default function MainWindow() {
           <Square
             value="×"
             onSquareClick={() => {
-              setState((prevState) => HandleOperatorClick("×", prevState));
+              setState((prevState) => HandleOperatorClick("*", prevState));
             }}
             css="allBtn BtnOps"
           />
@@ -116,7 +116,7 @@ export default function MainWindow() {
           <Square
             value="－"
             onSquareClick={() => {
-              setState((prevState) => HandleOperatorClick("－", prevState));
+              setState((prevState) => HandleOperatorClick("-", prevState));
             }}
             css="allBtn BtnOps"
           />
