@@ -291,7 +291,7 @@ export function HandleEqualClick(prev) {
 }
 
 export function HandleBackspaceClick(prev) {
-  if (prev.phase === "EnteringB" && prev.operandB === "") return;
+  if (prev.phase === "EnteringB" && prev.operandB === "") return { ...prev };
 
   let calc = String(getActive(prev) ?? "0");
 
