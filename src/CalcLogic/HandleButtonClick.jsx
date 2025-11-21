@@ -5,6 +5,7 @@ import {
   setActive,
   refreshSubDisplay,
 } from "./SharedUtility";
+import { ChangeDisplayOperator, ChangeCalcOperator } from "./ChangeOperator";
 
 export function HandleNumberClick(num, prev) {
   if (prev.phase === "ResultShown") {
@@ -90,7 +91,7 @@ export function HandleOperatorClick(op, prev) {
     prev = {
       ...prev,
       phase: "EnteringB",
-      operator: op,
+      operator: ChangeDisplayOperator(op),
       operandB: "",
       MDvalue: prev.OperandA,
     };
@@ -100,18 +101,18 @@ export function HandleOperatorClick(op, prev) {
   }
 
   if (prev.phase === "EnteringB" && prev.operandB === "") {
-    prev = { ...prev, operator: op };
+    prev = { ...prev, operator: ChangeDisplayOperator(op) };
     prev = refreshSubDisplay(false, prev);
     return { ...prev };
   } else if (prev.phase === "EnteringB") {
-    const oldOp = prev.operator;
+    const oldOp = ChangeCalcOperator(prev.operator);
     const oprdA = prev.operandA || "0";
     const oprdB = prev.operandB || "0";
 
     const A = new Decimal(oprdA);
     const B = new Decimal(oprdB);
 
-    if (oldOp === "÷" && B.eq(0)) {
+    if (oldOp === "/" && B.eq(0)) {
       return {
         ...prev,
         operandA: "0",
@@ -129,15 +130,15 @@ export function HandleOperatorClick(op, prev) {
         calc = A.plus(B);
         break;
 
-      case "－":
+      case "-":
         calc = A.minus(B);
         break;
 
-      case "×":
+      case "*":
         calc = A.times(B);
         break;
 
-      case "÷":
+      case "/":
         calc = A.div(B);
         break;
 
@@ -153,7 +154,7 @@ export function HandleOperatorClick(op, prev) {
       ...prev,
       operandA: dispCalc,
       operandB: "",
-      operator: op,
+      operator: ChangeDisplayOperator(op),
       phase: "EnteringB",
       MDvalue: dispCalc,
     };
@@ -164,7 +165,7 @@ export function HandleOperatorClick(op, prev) {
 
   prev = {
     ...prev,
-    operator: op,
+    operator: ChangeDisplayOperator(op),
     phase: "EnteringB",
     operandB: "",
     MDvalue: prev.operandA,
@@ -186,7 +187,7 @@ export function HandleEqualClick(prev) {
     setActive(getOperand, prev);
   }
 
-  const op = prev.operator;
+  const op = ChangeCalcOperator(prev.operator);
   const oprdA = prev.operandA || "0";
   const oprdB = prev.operandB || (prev.phase === "EnteringB" ? oprdA : "");
 
@@ -197,7 +198,7 @@ export function HandleEqualClick(prev) {
   const A = new Decimal(oprdA);
   const B = new Decimal(oprdB === "" ? "0" : oprdB);
 
-  if (op === "÷" && B.eq(0)) {
+  if (op === "/" && B.eq(0)) {
     return {
       ...prev,
       operandA: "0",
@@ -215,15 +216,15 @@ export function HandleEqualClick(prev) {
       calc = A.plus(B);
       break;
 
-    case "－":
+    case "-":
       calc = A.minus(B);
       break;
 
-    case "×":
+    case "*":
       calc = A.times(B);
       break;
 
-    case "÷":
+    case "/":
       calc = A.div(B);
       break;
 
