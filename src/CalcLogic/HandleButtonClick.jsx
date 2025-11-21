@@ -307,6 +307,28 @@ export function HandleBackspaceClick(prev) {
   return { ...prev };
 }
 
-export function HandleClearEntryClick(prev) {}
+export function HandleClearEntryClick(prev) {
+  if (prev.phase === "ResultShown") {
+    prev = {
+      ...prev,
+      operandA: "0",
+      operandB: "",
+      operator: null,
+      phase: "EnteringA",
+      MDvalue: "0",
+    };
+    prev = refreshSubDisplay(false, prev);
+    return { ...prev };
+  }
+
+  let calc = getActive(prev) ?? "0";
+
+  calc = "";
+
+  prev = setActive(calc, prev);
+  prev = { ...prev, MDvalue: "0" };
+  prev = refreshSubDisplay(false, prev);
+  return { ...prev };
+}
 
 export function HandleClearAllClick(prev) {}
