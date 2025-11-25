@@ -179,12 +179,12 @@ export function HandleEqualClick(prev) {
   let getOperand = getActive(prev);
   while (getOperand.endsWith("0") && getOperand.includes(".")) {
     getOperand = getOperand.slice(0, -1);
-    setActive(getOperand, prev);
+    prev = setActive(getOperand, prev);
   }
 
   if (getOperand.endsWith(".")) {
     getOperand = getOperand.slice(0, -1);
-    setActive(getOperand, prev);
+    prev = setActive(getOperand, prev);
   }
 
   const op = ChangeCalcOperator(prev.operator);
